@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Fashion website</title>
+    
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+</head>
+
+<body>
+    <header class="header">
+       
+         <img src="logo1.jpg" height="100px" width="100px" alt="logo"id="logo">
+         <div id="menu-bar" class="fas fa-bars"></div> 
+        <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="shop.html">Shop</a>
+            <!-- <a href="#">Men</a> -->
+            <a href="#">More</a>
+            <a href="signup.html" target="_blank">Sign-Up</a>
+        </nav>
+        <div class="icons">
+            <div class="fas fa-bars" id="menu-bar"></div>
+            <div class="fas fa-shopping-cart" id="shop-cart"></div>
+            <div class="fas fa-search" id="search-bar"></div>
+        </div>
+
+        <div class="search-box">
+            <input type="search" placeholder="search here">
+        </div>
+
+        <!-- shoping cart -->
+         <div class="shopping-cart">
+            <div class="shopping-box">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="shopping-box">
+                <i class="fas fa-times"></i>
+                
+            </div>
+            <div class="shopping-box">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <!-- shoping cart ended  -->
+
+    </header>
+
+    <!--pop-up-->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <h1>🎉 Hurry! Sale Ends In:</h1>
+            <div id="countdown"></div>
+            <img src="9.webp" alt="Sale Image" class="popup-image">
+        </div>
+    </div>
+    
+
+
+<!-- main background image -->
+<div class="main-background">
+    <div class="left-back"></div>
+
+
+    <div class="left-back">
+
+        <div class="left-inner">
+            <div class="right-content">
+                <h1>summer <br> collection</h1>
+                <p>Dive into our vibrant Summer Collection, where effortless elegance meets sun-soaked style. From breezy dresses and playful prints to cool, comfortable essentials, each piece is designed to keep you looking chic and feeling fresh all season long. Explore the latest trends and embrace the warmth with our must-have summer fashion finds.</p>
+                <i class="fas fa-heart"></i>
+            </div>
+            <div class="right-content">
+                <div class="inner-main-content">
+                    <h1>Special offer</h1>
+                    <p>black sleeves</p>
+                    <span>₹400</span>
+                    
+                    <a href="#" class="shopnow-btn">Shop now</a>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+
+</div>
+
+<!-- main background image ended-->
+
+<!-- gallery -->
+
+<div class="gallery">
+
+<h1>Our Gallery</h1>
+
+    <div class="main-gallery">
+        <div class="inner-gallery">
+            <img src="shoes2.jpeg" alt="">
+            <img src="bag.png" alt="">
+        </div>
+        <div class="inner-gallery">
+            <div class="girl">
+                <img src="formalgirl.jpeg" alt="">
+            </div>
+            
+        </div>
+        <div class="inner-gallery">
+            <img src="menimage.jpeg" alt="">
+            <img src="glasses.png" alt="">
+        </div>
+    </div>
+    
+</div>
+
+
+<!-- gallery end-->
+
+
+<!-- banner start -->
+<div class="banner">
+    <div class="inner-banner">
+        <img src="banner2.png" alt="">
+    </div>
+    <div class="inner-banner">
+        <h1>we offer brand new style</h1>
+        <p>Discover our latest arrivals, featuring brand-new styles designed to elevate your wardrobe. Our fresh collection blends contemporary trends with timeless elegance, ensuring you stay ahead of the fashion curve. Explore the new season's must-haves and redefine your look with our innovative and stylish offerings.</p>
+        <a href="#" id="shope-now">shop now</a>
+    </div>
+</div>
+<!-- banner start ended -->
+
+<!--  products type -->
+
+<div class="products-type">
+    <h1>products type</h1>
+<div class="main-product">
+    <div class="inner-product" id="slideshow1" data-images="feature4.png,feature2.png,feature3.png">
+        <img src="feature4.png" alt="" class="slide-img">
+        <a id="prev" class="prev" onclick="prevSlide('slideshow1')">&#10094;</a>
+        <a id="next" class="next" onclick="nextSlide('slideshow1')">&#10095;</a>
+        </div>
+
+    <div class="inner-product" id="slideshow2" data-images="men2.jpg,men1.jpg,men3.jpg">
+        <img src="boy.png" alt="" class="slide-img">
+        <a id="prev" class="prev" onclick="prevSlide('slideshow2')">&#10094;</a>
+        <a id="next" class="next" onclick="nextSlide('slideshow2')">&#10095;</a>
+       
+    </div>
+    <div class="inner-product" id="slideshow3" data-images="shoe.jpg,goggles1.jpg,bag1.jpg">
+        <img src="shoes3.jpg" alt="" class="slide-img">
+        <a id="prev" class="prev" onclick="prevSlide('slideshow3')">&#10094;</a>
+        <a id="next" class="next" onclick="nextSlide('slideshow3')">&#10095;</a>
+       
+    
+</div>
+
+
+
+</div>
+</div>
+
+<!-- our blogs and news -->
+
+<div class="our-blog">
+    <h1>our blogs and news</h1>
+
+    <div class="main-blog">
+
+        <div class="inner-blog">
+            <img src="blog1.png" alt="">
+            <p>"This is secret about fashion people."</p>
+        </div>
+        <div class="inner-blog">
+            <img src="blog2.png" alt="">
+            <p>"Style trends. Show confidence. Be you."</p>
+        </div>
+
+
+    </div>
+</div>
+
+ <!-- contact -->
+
+ <section class="contact" id="contact">
+    <h1 class="heading"><span>contact</span> us</h1>
+    <div class="row">
+        <div class="image">
+            <img src="contact.gif" alt="Contact Image">
+        </div>
+        <form action="/submit-form" method="post">
+            <h3>Get in Touch</h3>
+            <div class="inputBox">
+                <input type="text" name="name" placeholder="Your name" required>
+            </div>
+            <div class="inputBox">
+                <input type="email" name="email" placeholder="Your email" required>
+            </div>
+            <div class="inputBox">
+                <input type="text" name="subject" placeholder="Subject" required>
+            </div>
+            <textarea name="message" placeholder="Your Message" required></textarea>
+            <input type="submit" value="Send Message" class="btn">
+        </form>
+    </div>
+</section>
+
+
+</section>
+
+<!-- footer -->
+<footer>
+    <div class="footerContainer">
+        <div class="socialIcons">
+            <a href="
+            
+            "><i class="fa-brands fa-facebook"></i></a>
+            <a href=""><i class="fa-brands fa-instagram"></i></a>
+            <a href=""><i class="fa-brands fa-twitter"></i></a>
+            <a href=""><i class="fa-brands fa-google-plus"></i></a>
+            <a href=""><i class="fa-brands fa-youtube"></i></a>
+        </div>
+       
+        
+    </div>
+    <div class="footerBottom">
+        <p>Copyright &copy;2024; Designed by <span class="designer">Style Savvy</span></p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

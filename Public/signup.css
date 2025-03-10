@@ -1,0 +1,105 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-image: url('../images/bg2.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #fff;
+}
+
+/* Sign-Up Container */
+.signup-container {
+    background-color: white;
+   
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    width: 350px;
+    text-align: center;
+}
+.signup-container h3{
+    color: rgb(240, 208, 208);
+    font-family: cursive;
+}
+
+
+/* Header */
+.signup-container h2 {
+    
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: rgb(101, 65, 72);
+}
+
+/* Input Groups */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: black;
+    margin-bottom: 5px;
+    display: block;
+    font-weight: 500;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 5px;
+    background-color: rgb(240, 208, 208);
+    color: black;
+}
+
+.input-group input:focus {
+    outline: none;
+    background-color: rgb(194, 167, 167);
+}
+
+/* Sign-Up Button */
+.signup-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: rgb(101, 65, 72);
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.signup-btn:hover {
+    background-color:rgb(155, 105, 114) ;
+}
+
+/* Login Text */
+.login-text {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.login-text a {
+    color: rgb(193, 162, 167);
+    text-decoration: none;
+}
+
+.login-text a:hover {
+    text-decoration: underline;
+}

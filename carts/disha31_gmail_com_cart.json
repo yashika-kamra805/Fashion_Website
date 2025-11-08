@@ -1,0 +1,34 @@
+[
+  {
+    "id": 2,
+    "image": "/images/f3.jpeg",
+    "title": "Stellar Adventure T-Shirts",
+    "price": 900,
+    "brand": "Zara",
+    "itemId": 1746283328798
+  },
+  {
+    "id": 3,
+    "image": "/images/f4.jpeg",
+    "title": "Astronaut Odyssey Tees",
+    "price": 600,
+    "brand": "Zara",
+    "itemId": 1746283340582
+  },
+  {
+    "id": 2,
+    "image": "/images/f3.jpeg",
+    "title": "Stellar Adventure T-Shirts",
+    "price": 900,
+    "brand": "Zara",
+    "itemId": 1746283383810
+  },
+  {
+    "id": 6,
+    "image": "/images/f7.jpeg",
+    "title": "Cartoon Astronaut T-Shirts",
+    "price": 900,
+    "brand": "Hermes",
+    "itemId": 1746283807900
+  }
+]

@@ -1,7 +1,17 @@
 [
   {
-    "username": "geet._.28",
-    "email": "gitanjali2884@gmail.com",
-    "password": "geet123"
+    "id": 1,
+    "username": "admin",
+    "email": "admin2884@gmail.com",
+    "password": "$2b$10$IcDzdWrXoEG9ogpDp9GTUea23qA7wqtBMzlTQ9ixVNGSkKPnofQ/.",
+    "role": "admin"
+  },
+  
+  {
+    "id": 3,
+    "username": "Abhay",
+    "email": "abhay8894@gmail.com",
+    "password": "$2b$10$Ye.438ZeWWXIBBHmCWLLGunOsOmFqpPsPuTapprSdb7eB4ZVgzQ4y",
+    "role": "user"
   }
 ]

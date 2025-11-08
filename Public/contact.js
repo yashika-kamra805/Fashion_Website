@@ -132,101 +132,7 @@ window.onload = function() {
     openPopup();
 };
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     document.querySelector("form").addEventListener("submit", async function (event) {
-//         event.preventDefault(); // Prevent default form submission
 
-//         let username = document.getElementById("username").value.trim();
-//         let email = document.getElementById("email").value.trim();
-//         let password = document.getElementById("password").value.trim();
-//         let confirmPassword = document.getElementById("confirm-password").value.trim();
-
-//         if (!username || !email || !password || !confirmPassword) {
-//             alert("All fields are required!");
-//             return;
-//         }
-
-//         if (password !== confirmPassword) {
-//             alert("Passwords do not match!");
-//             return;
-//         }
-
-//         let userData = { username, email, password };
-
-//         try {
-//             let response = await fetch("/signup", {  // Removed hardcoded localhost
-//                 method: "POST",
-//                 headers: { "Content-Type": "application/json" },
-//                 body: JSON.stringify(userData),
-//             });
-
-//             let result = await response.json();
-//             if (response.ok) {
-//                 alert(result.message);
-//                 window.location.href = "login.html"; // Redirect on success
-//             } else {
-//                 alert(result.error);
-//             }
-//         } catch (error) {
-//             console.error("Error:", error);
-//             alert("Something went wrong. Try again!");
-//         }
-//     });
-// });
-
-// document.addEventListener("DOMContentLoaded", () => {
-//     document.querySelector("form").addEventListener("submit", async function (event) {
-//         event.preventDefault(); // Prevent default form submission
-
-//         let formData = {
-//             name: document.getElementById("name").value.trim(),
-//             email: document.getElementById("email").value.trim(),
-//             subject: document.getElementById("subject").value.trim(),
-//             message: document.getElementById("message").value.trim(),
-//         };
-
-//         console.log("Form Data:", formData); // Debugging log
-
-// //         try {
-// //             let response = await fetch("/submit-message", {
-// //                 method: "POST",
-// //                 headers: { "Content-Type": "application/json" },
-// //                 body: JSON.stringify(formData),
-// //             });
-
-// //             let result = await response.json();
-// //             console.log("Server Response:", result); // Debugging log
-
-// //             if (response.ok) {
-// //                 alert(result.message);
-// //                 document.querySelector("form").reset();
-// //             } else {
-// //                 alert(result.error);
-// //             }
-// //         } catch (error) {
-// //             console.error("Fetch Error:", error);
-// //             alert("Something went wrong!");
-// //         }
-
-// try {
-//     let messages = [];
-//     if (fs.existsSync(messagesFilePath)) {
-//         const fileContent = fs.readFileSync(messagesFilePath, "utf8").trim();
-//         messages = fileContent ? JSON.parse(fileContent) : [];
-//     }
-
-//     messages.push(newMessage);
-//     fs.writeFileSync(messagesFilePath, JSON.stringify(messages, null, 2));
-
-//     console.log("Form Submission:", newMessage);
-//     res.status(200).json({ message: "Message saved successfully!" });
-
-// } catch (error) {
-//     console.error("Error saving message:", error);
-//     res.status(500).json({ error: "Failed to save message" });
-// }
-//     });
-// });
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#contact-form").addEventListener("submit", async function (event) {
@@ -249,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             let result = await response.json();
-            console.log("Server Response:", result); // Debugging log
+            console.log("Server Response:", result); 
 
             if (response.ok) {
                 alert(result.message);
@@ -263,3 +169,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+
+const token = localStorage.getItem("token");
+
+if (token) {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const email = payload.email || "User";
+
+    const firstLetter = email.charAt(0).toUpperCase();
+
+    const avatar = document.getElementById("user-avatar");
+    avatar.style.display = "flex";
+    avatar.textContent = firstLetter;
+
+      // Show Admin link if role is admin
+      if (payload.role === "admin") {
+        const adminLink = document.getElementById("admin-link");
+        if (adminLink) {
+            adminLink.href = "/admin";
+            adminLink.style.display = "inline-block";
+        }
+    }
+}
+
+
+
+

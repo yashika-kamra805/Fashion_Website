@@ -399,3 +399,108 @@ footer{
         background-color: yellow;
     }
 }
+
+.user-avatar {
+    height: 40px;
+    width: 40px;
+    background-color: rgb(175, 167, 156);
+    border-radius: 50%;
+    color: yellow;
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    float: right;
+
+    /* Optional Enhancements */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect */
+.user-avatar:hover {
+    background-color: #63605d; /* darker shade of burlywood */
+    transform: scale(1.05);
+}
+/* cart */
+
+#shopping-cart {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    width: 300px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    padding: 20px;
+    z-index: 999;
+    display: none;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  #shopping-cart.active {
+    display: block;
+  }
+  
+  .cart-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .cart-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  .cart-item div {
+    flex: 1;
+  }
+  
+  .cart-item p {
+    font-size: 14px;
+    margin: 0 0 5px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .cart-item span {
+    font-size: 13px;
+    color: #888;
+    margin-right: 10px;
+  }
+  
+  .cart-item button {
+    background-color: #ff4d4f;
+    color: white;
+    padding: 5px 10px;
+    font-size: 13px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .cart-item button:hover {
+    background-color: #d9363e;
+  }
+  
+  .cart-total {
+    text-align: right;
+    font-weight: bold;
+    font-size: 16px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+  }
+  

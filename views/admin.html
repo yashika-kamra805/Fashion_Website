@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Product Management</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1 { color: #333; }
+    input, button { margin: 5px; padding: 8px; }
+    .product-card { border: 1px solid #ddd; padding: 10px; margin: 10px 0; }
+  </style>
+</head>
+<body>
+
+  <h1>🛍️ Admin Product Management</h1>
+
+  <h3>Add New Product</h3>
+  <input id="name" placeholder="Name">
+  <input id="price" type="number" placeholder="Price">
+  <input id="category" placeholder="Category">
+  <input id="image" placeholder="Image URL">
+  <input id="stock" type="number" placeholder="Stock">
+  <button onclick="addProduct()">Add Product</button>
+
+  
+  <div id="products"></div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    
+    function fetchProducts() {
+      fetch("/products")
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById("products");
+          container.innerHTML = "";
+          data.forEach(p => {
+            container.innerHTML += `
+              <div class="product-card">
+                <strong>${p.name}</strong> - ₹${p.price} | ${p.category} | Stock: ${p.stock}
+                <br>
+                <img src="${p.image}" width="100"><br>
+                <button onclick="deleteProduct('${p._id}')">Delete</button>
+                <button onclick="editProduct('${p._id}', '${p.name}', ${p.price}, '${p.category}', '${p.image}', ${p.stock})">Edit</button>
+              </div>
+            `;
+          });
+        });
+    }
+    
+    function addProduct() {
+      const product = {
+        name: document.getElementById("name").value,
+        price: parseFloat(document.getElementById("price").value),
+        category: document.getElementById("category").value,
+        image: document.getElementById("image").value,
+        stock: parseInt(document.getElementById("stock").value)
+      };
+    
+      fetch("/products-add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(product)
+      })
+      .then(res => res.json().then(data => ({ status: res.status, body: data })))
+      .then(({ status, body }) => {
+        if (status === 200) {
+          alert(body.message);
+          fetchProducts(); // refresh after add
+        } else {
+          alert(`Error ${status}: ${body.error}`);
+        }
+      })
+      .catch(error => {
+        console.error("Fetch error:", error);
+        alert("An error occurred while adding the product.");
+      });
+    }
+    
+    function deleteProduct(id) {
+      fetch(`/products-delete/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message);
+        fetchProducts();
+      });
+    }
+    
+    function editProduct(id, oldName, oldPrice, oldCategory, oldImage, oldStock) {
+      const name = prompt("Name", oldName);
+      const price = parseFloat(prompt("Price", oldPrice));
+      const category = prompt("Category", oldCategory);
+      const image = prompt("Image URL", oldImage);
+      const stock = parseInt(prompt("Stock", oldStock));
+    
+      fetch(`/products-edit/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ name, price, category, image, stock })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message);
+        fetchProducts();
+      });
+    }
+    
+    // Load products on page load
+    fetchProducts();
+    </script>
+    
+  
+</body>
+</html>

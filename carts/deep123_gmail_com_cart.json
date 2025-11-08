@@ -1,0 +1,27 @@
+[
+ 
+  {
+    "id": 2,
+    "image": "/images/f3.jpeg",
+    "title": "Stellar Adventure T-Shirts",
+    "price": 900,
+    "brand": "Zara",
+    "itemId": 1744620023865
+  },
+  {
+    "id": 5,
+    "image": "/images/f6.jpeg",
+    "title": "Cosmic Explorer Tees",
+    "price": 800,
+    "brand": "Nike",
+    "itemId": 1744620074851
+  },
+  {
+    "id": 13,
+    "image": "/images/n6.jpeg",
+    "title": "Cartoon Astronaut T-Shirts",
+    "price": 800,
+    "brand": "Zara",
+    "itemId": 1744620083129
+  }
+]

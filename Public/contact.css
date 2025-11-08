@@ -679,3 +679,29 @@ footer{
         margin: 4px;
     }
 }
+
+
+.user-avatar {
+    height: 40px;
+    width: 40px;
+    background-color: burlywood;
+    border-radius: 50%;
+    color: yellow;
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    float: right;
+
+    /* Optional Enhancements */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect */
+.user-avatar:hover {
+    background-color: #d2b48c; /* darker shade of burlywood */
+    transform: scale(1.05);
+}

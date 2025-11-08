@@ -1,0 +1,26 @@
+[
+  {
+    "id": 0,
+    "image": "/images/f1.jpg",
+    "title": "Cartoon Astronaut T-Shirts",
+    "price": 700,
+    "brand": "Adidas",
+    "itemId": 1744716324414
+  },
+  {
+    "id": 1,
+    "image": "/images/f2.jpeg",
+    "title": "Space Explorer Tees",
+    "price": 800,
+    "brand": "Adidas",
+    "itemId": 1744716326576
+  },
+  {
+    "id": 6,
+    "image": "/images/f7.jpeg",
+    "title": "Cartoon Astronaut T-Shirts",
+    "price": 900,
+    "brand": "Hermes",
+    "itemId": 1744716329004
+  }
+]

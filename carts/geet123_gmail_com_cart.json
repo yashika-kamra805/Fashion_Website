@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2,
+    "image": "/images/f3.jpeg",
+    "title": "Stellar Adventure T-Shirts",
+    "price": 900,
+    "brand": "Zara",
+    "itemId": 1746628902172
+  },
+  {
+    "id": 1,
+    "image": "/images/f2.jpeg",
+    "title": "Space Explorer Tees",
+    "price": 800,
+    "brand": "Adidas",
+    "itemId": 1746630392475
+  },
+  {
+    "id": 2,
+    "image": "/images/f3.jpeg",
+    "title": "Stellar Adventure T-Shirts",
+    "price": 900,
+    "brand": "Zara",
+    "itemId": 1746630394698
+  }
+]

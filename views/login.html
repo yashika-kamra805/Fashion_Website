@@ -10,11 +10,12 @@
         <img src="/images/logo1.jpg" alt="Fashion Logo">
     </div>
     <h2>Welcome Back</h2>
-    <form name="loginform" onsubmit="return validateLogin()" method="post" id = "login-form">
+    <form name="loginform" onsubmit="return validateLogin()" method="POST" id = "login-form">
         <div class="input-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="uname" required>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
         </div>
+        
         <div class="input-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="pwd" required>

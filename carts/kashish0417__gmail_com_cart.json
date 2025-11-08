@@ -1,0 +1,58 @@
+[
+  {
+    "id": 0,
+    "image": "/images/f1.jpg",
+    "title": "Cartoon Astronaut T-Shirts",
+    "price": 700,
+    "brand": "Adidas",
+    "itemId": 1744619934279
+  },
+  {
+    "id": 1,
+    "image": "/images/f2.jpeg",
+    "title": "Space Explorer Tees",
+    "price": 800,
+    "brand": "Adidas",
+    "itemId": 1744619936583
+  },
+  {
+    "id": 4,
+    "image": "/images/f5.jpeg",
+    "title": "Interstellar Pioneer Tees",
+    "price": 1000,
+    "brand": "Nike",
+    "itemId": 1744635421322
+  },
+  {
+    "id": 1,
+    "image": "/images/f2.jpeg",
+    "title": "Space Explorer Tees",
+    "price": 800,
+    "brand": "Adidas",
+    "itemId": 1744635426499
+  },
+  {
+    "id": 0,
+    "image": "/images/f1.jpg",
+    "title": "Cartoon Astronaut T-Shirts",
+    "price": 700,
+    "brand": "Adidas",
+    "itemId": 1744715083157
+  },
+  {
+    "id": 1,
+    "image": "/images/f2.jpeg",
+    "title": "Space Explorer Tees",
+    "price": 800,
+    "brand": "Adidas",
+    "itemId": 1744715084916
+  },
+  {
+    "id": 2,
+    "image": "/images/f3.jpeg",
+    "title": "Stellar Adventure T-Shirts",
+    "price": 900,
+    "brand": "Zara",
+    "itemId": 1744715086671
+  }
+]

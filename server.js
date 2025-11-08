@@ -2,329 +2,412 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const fs = require("fs"); // Import file system module
-
+const fs = require("fs"); 
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-const messagesFilePath = path.join(__dirname, "messages.json"); // Define file path
+app.use(cors()); 
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "public"))); 
+app.use(express.static(path.join(__dirname, "views")));
 
-app.use(cors()); // Allow API requests
-app.use(bodyParser.json()); // Parse JSON data
-app.use(express.static(path.join(__dirname, "views"))); // Serves HTML files
-app.use(express.static(path.join(__dirname, "public"))); // Serve static files (CSS, JS, images)
+const userSchema = new mongoose.Schema({
+    id: Number,
+    username: String,
+    email: { type: String, unique: true },
+    password: String,
+    role: { type: String, default: "user" }
+  });
 
-// ✅ Ensure messages.json exists before reading
-if (!fs.existsSync(messagesFilePath)) {
-    fs.writeFileSync(messagesFilePath, JSON.stringify([])); // Create an empty array
-}
+// MongoDB connection
+mongoose.connect("mongodb://localhost:27017/Shopdb", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000 
+  })
+  .then(() => {
+    console.log("MongoDB connected");
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });
 
-// ✅ Serve Contact Page
+  const Message = require("./models/Message");
 app.get("/", (req, res) => {
-    const filePath = path.join(__dirname, "views", "contact.html"); // Ensure correct path
-    console.log("Serving file:", filePath);
-    res.sendFile(filePath, (err) => {
-        if (err) {
-            console.error("Error sending file:", err);
-            res.status(500).send("Internal Server Error");
-        }
-    });
+    res.sendFile(path.join(__dirname, "views", "contact.html"));
 });
-// ✅ Function to Read Messages
-const readMessages = () => {
-    if (fs.existsSync(messagesFilePath)) {
-        return JSON.parse(fs.readFileSync(messagesFilePath, "utf8"));
+//messages
+app.get("/messages", async (req, res) => {
+    try {
+      const messages = await Message.find().sort({ date: -1 });
+      res.json(messages);
+    } catch (err) {
+      console.error("Error fetching messages:", err);
+      res.status(500).json({ error: "Failed to fetch messages" });
     }
-    return []; // Return empty array if file doesn't exist
-};
+  });  
 
-// ✅ API to Get Saved Messages
-app.get("/messages", (req, res) => {
-    const messages = readMessages();
-    res.json(messages);
-});
-
-
-// ✅ Handle Contact Form Submission
-app.post("/submit-message", (req, res) => {
+  app.post("/submit-message", async (req, res) => {
     const { name, email, subject, message } = req.body;
-
+  
     if (!name || !email || !subject || !message) {
-        return res.status(400).json({ error: "All fields are required" });
+      return res.status(400).json({ error: "All fields are required" });
     }
-
-    const newMessage = { name, email, subject, message, date: new Date() };
-
+  
     try {
-        // Read existing messages
-        let messages = [];
-        if (fs.existsSync(messagesFilePath)) {
-            messages = JSON.parse(fs.readFileSync(messagesFilePath, "utf8"));
-        }
-        
-        // Add new message
-        messages.push(newMessage);
-
-        // Save back to file
-        fs.writeFileSync(messagesFilePath, JSON.stringify(messages, null, 2));
-
-        console.log("Form Submission:", newMessage);
-        res.status(200).json({ message: "Message saved successfully!" });
-
+      const newMessage = new Message({ name, email, subject, message });
+      await newMessage.save();
+  
+      console.log("Form Submission:", newMessage);
+      res.status(200).json({ message: "Message saved successfully!" });
     } catch (error) {
-        console.error("Error saving message:", error);
-        res.status(500).json({ error: "Failed to save message" });
+      console.error("Error saving message:", error);
+      res.status(500).json({ error: "Failed to save message" });
     }
-});
-
-// ✅ Update Existing Message (PUT Method)
-app.put("/update-message", (req, res) => {
+  });
+  
+  
+  app.put("/update-message", async (req, res) => {
     const { email, subject, message } = req.body;
-
+  
     if (!email || !subject || !message) {
-        return res.status(400).json({ error: "Email, subject, and message are required for update" });
+      return res.status(400).json({ error: "Email, subject, and message are required for update" });
     }
-
+  
     try {
-        let messages = JSON.parse(fs.readFileSync(messagesFilePath, "utf8"));
-
-        // Find message by email
-        let messageIndex = messages.findIndex((msg) => msg.email === email);
-
-        if (messageIndex === -1) {
-            return res.status(404).json({ error: "Message not found" });
-        }
-
-        // Update message
-        messages[messageIndex].subject = subject;
-        messages[messageIndex].message = message;
-        messages[messageIndex].date = new Date();
-
-        // Save updated messages back to file
-        fs.writeFileSync(messagesFilePath, JSON.stringify(messages, null, 2));
-
-        console.log("Message Updated:", messages[messageIndex]);
-        res.status(200).json({ message: "Message updated successfully!" });
-
+      const updated = await Message.findOneAndUpdate(
+        { email },
+        { subject, message, date: new Date() },
+        { new: true }
+      );
+  
+      if (!updated) {
+        return res.status(404).json({ error: "Message not found" });
+      }
+  
+      res.status(200).json({ message: "Message updated successfully!", updated });
     } catch (error) {
-        console.error("Error updating message:", error);
-        res.status(500).json({ error: "Failed to update message" });
+      console.error("Error updating message:", error);
+      res.status(500).json({ error: "Failed to update message" });
     }
-});
-
-// 🗑 DELETE Method to Remove a Message by Email
-app.delete("/delete-message", (req, res) => {
+  });
+  
+  app.delete("/delete-message", async (req, res) => {
     const { email } = req.body;
-
+  
     if (!email) {
-        return res.status(400).json({ error: "Email is required to delete a message" });
+      return res.status(400).json({ error: "Email is required to delete a message" });
     }
-
-    if (!fs.existsSync(messagesFilePath)) {
-        return res.status(404).json({ error: "No messages found" });
-    }
-
-    let messages = JSON.parse(fs.readFileSync(messagesFilePath));
-
-    // Filter messages to remove the one with the given email
-    const filteredMessages = messages.filter((msg) => msg.email !== email);
-
-    if (filteredMessages.length === messages.length) {
+  
+    try {
+      const deleted = await Message.findOneAndDelete({ email });
+  
+      if (!deleted) {
         return res.status(404).json({ error: "No message found for the given email" });
+      }
+  
+      res.status(200).json({ message: "Message deleted successfully!" });
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      res.status(500).json({ error: "Failed to delete message" });
     }
-
-    fs.writeFileSync(messagesFilePath, JSON.stringify(filteredMessages, null, 2));
-
-    res.status(200).json({ message: "Message deleted successfully!" });
-});
-
-// Serve Signup Page
+  });
+  
+//signup
 app.get("/signup", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "signup.html"));
-});
-const readUsers= () => {
-    if (fs.existsSync(usersFilePath)) {
-        return JSON.parse(fs.readFileSync(usersFilePath, "utf8"));
-    }
-    return []; // Return empty array if file doesn't exist
-};
+  });
 
-// ✅ API to Get Saved 
-app.get("/users", (req, res) => {
-    const data = readUsers();
-    res.json(data);
+  app.get("/users", async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        console.error("Error fetching users:", err);
+        res.status(500).json({ error: "Failed to fetch users" });
+    }
 });
 
-const usersFilePath = path.join(__dirname, "users.json");
+const User = require("./models/User");
+const saltRounds = 10;
 
-app.post("/signup", (req, res) => {
-    const { username, email, password } = req.body;
+app.post("/signup", async (req, res) => {
+  const { username, email, password } = req.body;
 
-    if (!username || !email || !password) {
-        return res.status(400).json({ error: "All fields are required" });
+  if (!username || !email || !password) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  try {
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).json({ error: "Email already registered" });
     }
-
-    let users = [];
-
-    // Read existing users
-    if (fs.existsSync(usersFilePath)) {
-        const rawData = fs.readFileSync(usersFilePath, "utf8");
-        users = JSON.parse(rawData);
-    }
-
-    // Check if email already exists
-    if (users.some(user => user.email === email)) {
-        return res.status(400).json({ error: "Email already registered" });
-    }
-
-    // Save new user (without hashing password)
-    users.push({ username, email, password });
-
-    // Write back to file
-    fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const newUser = new User({ username, email, password: hashedPassword, role: email === "admin2884@gmail.com" ? "admin" : "user" });
+    await newUser.save();
 
     res.status(200).json({ message: "Signup successful!" });
+  } catch (err) {
+    console.error("Error during signup:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
-
-// 🗑 DELETE Method to Remove a User by Email
-app.delete("/delete", (req, res) => {
+app.delete("/delete", async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
         return res.status(400).json({ error: "Email is required to delete a user" });
     }
 
-    if (!fs.existsSync(usersFilePath)) {
-        return res.status(404).json({ error: "No users found" });
+    try {
+        const userToDelete = await User.findOne({ email });
+
+        if (!userToDelete) {
+            return res.status(404).json({ error: "No user found with the given email" });
+        }
+
+        await User.deleteOne({ email });
+
+        res.status(200).json({ message: "User deleted successfully!" });
+    } catch (err) {
+        console.error("Error during user deletion:", err);
+        res.status(500).json({ error: "Internal Server Error" });
     }
-
-    let users = JSON.parse(fs.readFileSync(usersFilePath, "utf8"));
-
-    // Filter users to remove the one with the given email
-    const filteredUsers = users.filter((user) => user.email !== email);
-
-    if (filteredUsers.length === users.length) {
-        return res.status(404).json({ error: "No user found for the given email" });
-    }
-
-    fs.writeFileSync(usersFilePath, JSON.stringify(filteredUsers, null, 2));
-
-    res.status(200).json({ message: "User deleted successfully!" });
 });
 
-// Corrected Login Page Route
+//login
 app.get("/login", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "login.html"));
 });
 
-// ✅ API to Get All Users
-app.get("/users", (req, res) => {
-    if (fs.existsSync(usersFilePath)) {
-        const users = JSON.parse(fs.readFileSync(usersFilePath, "utf8"));
-        return res.json(users);
-    }
-    res.status(404).json({ error: "No users found!" });
-});
+const SECRET_KEY = "your_jwt_secret"; 
 
-//Handle login
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
 
-app.post("/login", (req, res) => {
-    const { username, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
 
-    if (!username || !password) {
-        return res.status(400).json({ error: "All fields are required" });
-    }
-
-    let users = [];
-
-    // Read users.json and log output
-    if (fs.existsSync(usersFilePath)) {
-        const fileData = fs.readFileSync(usersFilePath, "utf8");
-        try {
-            users = JSON.parse(fileData);
-            console.log("✅ Users Loaded:", users);
-        } catch (error) {
-            console.error("❌ Error parsing users.json:", error);
-            return res.status(500).json({ error: "Internal Server Error" });
-        }
-    } else {
-        console.error("⚠️ users.json file not found!");
-        return res.status(500).json({ error: "User database not found!" });
-    }
-
-    // Check if user exists
-    const user = users.find(u => u.username === username);
+  try {
+    const user = await User.findOne({ email });
 
     if (!user) {
-        console.log("❌ User not found:", username);
-        return res.status(401).json({ error: "Invalid username or password!" });
+      return res.status(401).json({ error: "Invalid email or password!" });
     }
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
 
-    // Check password
-    if (user.password !== password) {
-        console.log("❌ Incorrect password for:", username);
-        return res.status(401).json({ error: "Invalid username or password!" });
+    if (!isPasswordMatch) {
+      return res.status(401).json({ error: "Invalid email or password!" });
     }
+    const token = jwt.sign({ email: user.email, role: user.role }, SECRET_KEY, { expiresIn: "1h" });
 
-    console.log("✅ Login successful for:", username);
-    res.json({ message: "Login successful!", redirect: "/contact" });
+    res.json({
+      message: user.role === "admin" ? "Welcome Admin!" : "Welcome User!",
+      role: user.role,
+      token,
+      email: user.email,
+      redirect: "/contact"
+    });
+  } catch (err) {
+    console.error("Error during login:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
-  
-
-
 
 //cart
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
 
-app.get("/shop", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "shop.html"));
-});
-let cart = [];
+    if (!token) return res.status(401).json({ error: "Token required" });
 
-// API to get cart items
-app.get("/cart", (req, res) => {
-    res.json(cart);
-});
+    jwt.verify(token, SECRET_KEY, (err, user) => {
+        if (err) return res.status(403).json({ error: "Invalid token" });
+        req.user = user; 
+        next();
+    });
+}
+app.get("/shop",(req,res) => {
+    res.sendFile(path.join(__dirname, "views" , "shop.html"));
+})
 
-// API to add an item to the cart
-app.post("/cart", (req, res) => {
-    const item = req.body;
-    item.id = cart.length ? cart[cart.length - 1].id + 1 : 1;  // Auto-increment ID
-    cart.push(item);
-    res.json({ message: "Item added to cart", cart });
-});
+const Cart = require("./models/Cart");
 
-
-// API to remove an item from the cart
-app.delete("/cart/:id", (req, res) => {
-    const itemId = parseInt(req.params.id);
-    console.log(`Delete request received for ID: ${itemId}`); // Log request ID
-    console.log("Current cart:", cart); // Log current cart before deletion
-
-    const itemIndex = cart.findIndex(item => item.id === itemId);
-
-    if (itemIndex === -1) {
-        console.log(`Item with ID ${itemId} not found`);
-        return res.status(404).json({ message: `Item with ID ${itemId} not found` });
+app.get("/cart", authenticateToken, async (req, res) => {
+    try {
+      const email = req.user.email;
+      const cart = await Cart.findOne({ email });
+      res.json(cart ? cart.items : []);
+    } catch (err) {
+      console.error("Error fetching cart:", err);
+      res.status(500).json({ error: "Failed to fetch cart" });
     }
+  });
+  const Product = require('./models/Product'); 
 
-    cart.splice(itemIndex, 1);
-    console.log(`Item with ID ${itemId} deleted`);
-    res.json({ message: `Item with ID ${itemId} removed`, cart });
-});
+app.post("/cart/add", authenticateToken, async (req, res) => {
+  const email = req.user.email;
+    let newItem = req.body;
+  
+    try {
+     if (newItem.productId && !newItem.title && !newItem.name) {
+        const product = await Product.findById(newItem.productId);
+          if (!product) {
+              return res.status(404).json({ error: "Product not found" });
+          }
+  
+        newItem = {
+            itemId: Date.now(),
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            category: product.category,
+            productId: product._id,
+        };
+          } else {
+              newItem.itemId = Date.now(); // add itemId to frontend item
+          }
+  
+          let cart = await Cart.findOne({ email });
+          if (!cart) {
+              cart = new Cart({ email, items: [newItem] });
+          } else {
+              cart.items.push(newItem);
+          }
+  
+          await cart.save();
+          res.status(200).json({ message: "Item added to cart", item: newItem });
+  
+      } catch (err) {
+          console.error("Error adding item to cart:", err);
+          res.status(500).json({ error: "Failed to add item to cart" });
+      }
+  });
+  
 
+  app.post("/cart/remove", authenticateToken, async (req, res) => {
+    const email = req.user.email;
+    const { itemId } = req.body;
 
-app.put("/cart/:id", (req, res) => {
-    const itemId = parseInt(req.params.id);
-    const updatedItem = req.body;
-    
-    let itemIndex = cart.findIndex(item => item.id === itemId);
-    if (itemIndex !== -1) {
-        cart[itemIndex] = { ...cart[itemIndex], ...updatedItem };
-        res.json({ message: `Item with ID ${itemId} updated`, cart });
-    } else {
-        res.status(404).json({ message: `Item with ID ${itemId} not found` });
+    try {
+        const cart = await Cart.findOne({ email });
+
+        if (!cart) {
+            return res.status(404).json({ error: "Cart not found" });
+        }
+
+        console.log("Removing itemId:", itemId);
+        console.log("Existing itemIds:", cart.items.map(item => item.itemId));
+
+        cart.items = cart.items.filter(item => item.itemId.toString() !== itemId.toString());
+        await cart.save();
+
+        res.json({ message: "Item removed", cart: cart.items });
+    } catch (err) {
+        console.error("Error removing item:", err);
+        res.status(500).json({ error: "Failed to remove item from cart" });
     }
 });
+
+
+//admin role
+
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "admin.html"));
+});
+
+app.get("/products", async (req, res) => {
+  try {
+      const products = await Product.find();
+      res.json(products);
+  } catch (err) {
+      res.status(500).json({ error: "Error fetching products" });
+  }
+});
+
+app.post("/products-add", authenticateToken, async (req, res) => {
+  if (req.user.role !== "admin") {
+      return res.status(403).json({ error: "Only admin can add products" });
+  }
+
+  const { name, price, category, image, stock } = req.body;
+
+  if (!name || !price || !category || !image || !stock) {
+      return res.status(400).json({ error: "All fields are required" });
+  }
+
+  try {
+      const newProduct = new Product({ name, price, category, image, stock });
+      await newProduct.save();
+      res.status(200).json({ message: "Product added successfully", newProduct });
+  } catch (err) {
+      res.status(500).json({ error: "Error saving product" });
+  }
+});
+
+app.delete("/products-delete/:id", authenticateToken, async (req, res) => {
+  if (req.user.role !== "admin") {
+      return res.status(403).json({ error: "Only admin can delete products" });
+  }
+
+  try {
+      const product = await Product.findByIdAndDelete(req.params.id);
+      if (!product) return res.status(404).json({ error: "Product not found" });
+
+      res.status(200).json({ message: "Product deleted successfully" });
+  } catch (err) {
+      res.status(500).json({ error: "Error deleting product" });
+  }
+});
+
+app.put("/products-edit/:id", authenticateToken, async (req, res) => {
+  if (req.user.role !== "admin") {
+      return res.status(403).json({ error: "Only admin can edit products" });
+  }
+
+  const { name, price, category, image, stock } = req.body;
+
+  try {
+      const product = await Product.findByIdAndUpdate(
+          req.params.id,
+          { name, price, category, image, stock },
+          { new: true }
+      );
+
+      if (!product) return res.status(404).json({ error: "Product not found" });
+
+      res.status(200).json({ message: "Product updated", product });
+  } catch (err) {
+      res.status(500).json({ error: "Error updating product" });
+  }
+});
+
+app.get("/more", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "more.html"));
+});
+
+// app.get('/cart/:userId', async (req, res) => {
+//   const { userId } = req.params;
+
+//   try {
+//       const cart = await Cart.findOne({ userId }).populate('products.productId');
+
+//       if (!cart) {
+//           return res.status(404).json({ message: 'Cart not found' });
+//       }
+
+//       res.status(200).json(cart);
+//   } catch (err) {
+//       console.error('Error fetching cart:', err);
+//       res.status(500).json({ message: 'Server error' });
+//   }
+// });
 
 const PORT = 5000;
 app.listen(PORT, () => {

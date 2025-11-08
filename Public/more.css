@@ -1,0 +1,194 @@
+:root {
+    --maincolor: #c4c9cd; /* Define your main color here */
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+.header {
+    /* background-color: #333;
+    color: white;
+    padding: 15px;
+    text-align: center; */
+    
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 7%;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    z-index: 100000;
+}
+img#logo{
+    height: 80px;
+    width: 80px;
+}
+.navbar a{
+    color: black;
+    font-size: 1.0rem;
+    margin-left: 3rem;
+    text-decoration: none;
+}
+.navbar a:hover{
+    background-color: var(--maincolor);
+    color: white;
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+}
+.icons div{
+    font-size: 1.2rem;
+    margin-left: 1rem;
+    color: black;
+    cursor: pointer;
+}
+.icons div:hover{
+    background-color: var(--maincolor);
+    color: white;
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+}
+#menu-bar{
+    display: none;
+}
+
+.search-box.active{
+    left: 40%;
+}
+.search-box{
+    position: absolute;
+    top: 110%;
+    left: 100%;
+    width: 50%;
+    right: 2rem;
+}
+.search-box input{
+    padding: 1rem 1.5rem;
+    width: 100%;
+    border-radius: 15px;
+    border: 0;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.shopping-cart.active{
+    left: 70%;
+}
+.shopping-cart{
+    position: absolute;
+    top: 110%;
+    width: 40rem;
+    right: 2rem;
+    left: 100%;
+    background: white;
+    max-height: 500px; /* Set a max height for the cart */
+    overflow-y: auto; 
+    transition: left 0.3s ease-in-out; /* Smooth animation */
+    z-index: 1000; /* Bring it above other elements */
+
+    
+
+}
+
+.shopping-cart.active {
+    left: 70%;  /* Slide in when active */
+}
+
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 150px;
+    padding-bottom: 290px;
+    
+}
+
+
+.product-card {
+    background-color: white;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.product-card h3 {
+    margin: 10px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.product-card p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #777;
+}
+
+.product-card button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.product-card button:hover {
+    background-color: #45a049;
+}
+footer{
+  
+    background-color: #bcc7cf;
+    position: relative;
+    width: 100%;
+}
+.footerContainer{
+    width: 100%;
+    padding: 70px 30px 20px ;
+}
+.socialIcons{
+    display: flex;
+    justify-content: center;
+}
+.socialIcons a{
+    text-decoration: none;
+    padding:  10px;
+    background-color: white;
+    margin: 10px;
+    border-radius: 50%;
+}
+.socialIcons a i{
+    font-size: 2em;
+    color: black;
+    opacity: 0,9;
+}
+
+.socialIcons a:hover{
+    background-color: #111;
+    transition: 0.5s;
+}
+.socialIcons a:hover i{
+    color: white;
+    transition: 0.5s;
+}
+.footerBottom{
+  
+    background-color: #91b3c9;
+   
+    padding: 0.5rem 7%;
+    text-align: center;
+}
+.footerBottom p{
+    color: white;
+}

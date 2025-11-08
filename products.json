@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1746891523634,
+    "name": "asdfgh",
+    "price": 1200,
+    "category": "asdfg",
+    "image": "sfg",
+    "stock": 23,
+    "date": "2025-05-10T15:38:43.634Z"
+  },
+  {
+    "id": 1746892392732,
+    "name": "asd",
+    "price": 23,
+    "category": "sdf",
+    "image": "asdf",
+    "stock": 123,
+    "date": "2025-05-10T15:53:12.732Z"
+  },
+  {
+    "id": 1746892469059,
+    "name": "asdfgh",
+    "price": 1234,
+    "category": "sdfg",
+    "image": "sdfv",
+    "stock": 12345,
+    "date": "2025-05-10T15:54:29.059Z"
+  },
+  {
+    "id": 1746892618873,
+    "name": "zxcvbnm,",
+    "price": 345,
+    "category": "cvbnm,",
+    "image": "vbnm",
+    "stock": 6,
+    "date": "2025-05-10T15:56:58.873Z"
+  }
+]

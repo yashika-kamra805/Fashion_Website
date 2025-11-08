@@ -1,10 +1,10 @@
 document.getElementById("login-form").addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    let enteredUsername = document.getElementById("username").value;
+    let enteredEmail = document.getElementById("email").value;
     let enteredPassword = document.getElementById("password").value;
 
-    const userData = { username: enteredUsername, password: enteredPassword };
+    const userData = { email: enteredEmail, password: enteredPassword };
 
     try {
         const response = await fetch("http://localhost:5000/login", {
@@ -16,10 +16,15 @@ document.getElementById("login-form").addEventListener("submit", async function 
         const result = await response.json();
 
         if (response.ok) {
-            alert(result.message);
-            // window.location.href = result.redirect; // Redirect from server response
-            // window.location.href = "/contact";
-            window.location.href = "http://localhost:5000/";
+            localStorage.setItem("token", result.token); 
+
+            if (result.role === "admin") {
+                alert("Admin is logged in");
+                window.location.href = "http://localhost:5000/";
+            } else {
+                alert("User is logged in");
+                window.location.href = "http://localhost:5000/";
+            }
         } else {
             alert(result.error);
         }
